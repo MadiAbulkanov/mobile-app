@@ -3,10 +3,6 @@
 
 Минимальная структура React Native (Expo) с TypeScript для запуска через Expo Go.
 
-## Что сделано
-- Добавлены базовые файлы: `package.json`, `App.tsx`, `app.json`, `babel.config.js`, `tsconfig.json`, `.gitignore`.
-- Создана папка `assets/` для картинок/иконок.
-
 ## Как запустить (Windows PowerShell)
 1. Откройте PowerShell и перейдите в папку проекта:
 
