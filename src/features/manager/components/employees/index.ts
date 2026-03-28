@@ -1,0 +1,1 @@
+export { ManagerEmployeesTab } from './ManagerEmployeesTab';
