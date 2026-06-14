@@ -3,7 +3,20 @@
     "name": "mvp",
     "slug": "mvp",
     "version": "1.0.0",
-  "sdkVersion": "54.0.0",
-    "platforms": ["ios", "android", "web"]
+    "sdkVersion": "54.0.0",
+    "jsEngine": "hermes",
+    "android": {
+      "package": "com.user.fieldopsmvp"
+    },
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "e77b7262-243a-4409-95bb-2ea4b86bc813"
+      }
+    }
   }
 }

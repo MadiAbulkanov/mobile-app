@@ -1,0 +1,13 @@
+export { LogoIcon } from './LogoIcon';
+export { ArrowIcon } from './ArrowIcon';
+export { SearchIcon } from './SearchIcon';
+export { FilterIcon } from './FilterIcon';
+export { UserIcon } from './UserIcon';
+export { PlusIcon } from './PlusIcon';
+export { PencilIcon } from './PencilIcon';
+export { TrashIcon } from './TrashIcon';
+export { CreateUserIcon } from './CreateUserIcon';
+export { PaymentIcon } from './PaymentIcon';
+export { KPIcon } from './KPIcon';
+export { CaretDownIcon } from './CaretDownIcon';
+export { DotsIcon } from './DotsIcon';

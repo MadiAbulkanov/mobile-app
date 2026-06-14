@@ -1,71 +1,101 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
 
-import { appStyles as styles } from '../../styles/appStyles';
-import { Role } from '../../types/fieldOps';
+import { appStyles as styles, color } from '../../styles/appStyles';
+import { LogoIcon } from 'src/components/common/icons';
+
+const demoRoleAccounts = [
+  { label: 'Owner (владелец)', email: 'demo-owner@local' },
+  { label: 'Дизайнер', email: 'demo-designer@local' },
+  { label: 'Склад', email: 'demo-warehouse@local' },
+  { label: 'Швейный цех', email: 'demo-seamstress@local' },
+  { label: 'Монтажник', email: 'demo-installer@local' },
+];
 
 type AuthScreenProps = {
-  onSelectRole: (role: Role) => void;
+  authError: string | null;
+  isLoading: boolean;
+  onLogin: (email: string, password: string) => Promise<boolean>;
 };
 
-export const AuthScreen: React.FC<AuthScreenProps> = ({ onSelectRole }) => {
+export const AuthScreen: React.FC<AuthScreenProps> = ({ authError, isLoading, onLogin }) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailFocused, setEmailFocused] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+
+  const handleLogin = async () => {
+    if (!email.trim() || !password.trim()) {
+      return;
+    }
+
+    await onLogin(email.trim(), password.trim());
+  };
+
   return (
-    <ScrollView
-      contentContainerStyle={styles.authScrollContent}
-      style={styles.screenScroll}
-    >
+    <ScrollView contentContainerStyle={styles.authScrollContent} style={styles.screenScroll}>
       <View style={styles.loginCard}>
         {/* Logo */}
         <View style={styles.loginLogoWrap}>
-          <View style={styles.loginLogoCircle}>
-            <Text style={styles.loginLogoLetter}>B</Text>
-          </View>
+          <LogoIcon size={160} />
         </View>
 
-        <Text style={styles.loginTitle}>Войдите, чтобы увидеть задачи на сегодня</Text>
+        <Text style={styles.loginTitle}>Единая база</Text>
+        <Text style={styles.loginDescription}>Название организации</Text>
 
         {/* Fields */}
-        <View style={styles.stackGap12}>
+        <View style={{ gap: 12, marginTop: 40 }}>
           <TextInput
-            style={styles.textInput}
-            placeholder="Email или телефон"
-            placeholderTextColor="#94A3B8"
+            style={[styles.textInput, emailFocused && { borderColor: color.blue500 }]}
+            placeholder="E-mail/телефон"
+            placeholderTextColor="#747474"
             keyboardType="email-address"
             autoCapitalize="none"
+            value={email}
+            onChangeText={setEmail}
+            onFocus={() => setEmailFocused(true)}
+            onBlur={() => setEmailFocused(false)}
           />
           <TextInput
-            style={styles.textInput}
+            style={[styles.textInput, passwordFocused && { borderColor: color.blue500 }]}
             placeholder="Пароль"
-            placeholderTextColor="#94A3B8"
+            placeholderTextColor="#747474"
             secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+            onFocus={() => setPasswordFocused(true)}
+            onBlur={() => setPasswordFocused(false)}
           />
         </View>
+
+        {authError ? <Text style={{ color: '#B91C1C' }}>{authError}</Text> : null}
 
         {/* Primary action */}
         <Pressable
           style={[styles.primaryButton, styles.fullWidthButton]}
-          onPress={() => onSelectRole('employee')}
+          onPress={handleLogin}
+          disabled={isLoading}
         >
           <Text style={styles.primaryButtonText}>Войти</Text>
         </Pressable>
 
-        {/* Demo shortcuts */}
-        <View style={styles.loginDivider}>
-          <View style={styles.loginDividerLine} />
-          <Text style={styles.loginDividerText}>или войти как</Text>
-          <View style={styles.loginDividerLine} />
-        </View>
-
-        <View style={styles.stackGap12}>
-          <Pressable
-            style={[styles.secondaryButton, styles.fullWidthButton]}
-            onPress={() => onSelectRole('manager')}
+        <View style={{ gap: 8 }}>
+          <Text style={{ color: color.slate600, textAlign: 'center' }}>Быстрый вход по ролям</Text>
+          <View
+            style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}
           >
-            <Text style={styles.secondaryButtonText}>Менеджер (демо)</Text>
-          </Pressable>
+            {demoRoleAccounts.map(item => (
+              <Pressable
+                key={item.email}
+                onPress={() => onLogin(item.email, 'demo')}
+                disabled={isLoading}
+              >
+                <Text style={styles.secondaryButtonText}>{item.label}</Text>
+              </Pressable>
+            ))}
+          </View>
         </View>
       </View>
     </ScrollView>
   );
 };
-

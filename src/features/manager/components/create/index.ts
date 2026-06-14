@@ -1,1 +1,0 @@
-export { ManagerCreateTaskTab } from './ManagerCreateTaskTab';

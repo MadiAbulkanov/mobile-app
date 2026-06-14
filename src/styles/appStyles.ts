@@ -1,6 +1,10 @@
 import { StyleSheet } from 'react-native';
 
 export const color = {
+  black: '#000000',
+  slate: '#E9E9E9',
+  slate10: '#F4F4F4',
+  slate20: '#818181',
   slate50: '#F8FAFC',
   slate100: '#F1F5F9',
   slate200: '#E2E8F0',
@@ -12,8 +16,9 @@ export const color = {
   slate800: '#1E293B',
   slate900: '#0F172A',
   blue500: '#3B82F6',
-  blue600: '#2563EB',
+  blue600: '#60CCED',
   blue700: '#1D4ED8',
+  red: '#FF0B0B',
   amber700: '#B45309',
   emerald700: '#047857',
   white: '#FFFFFF',
@@ -22,7 +27,7 @@ export const color = {
 export const appStyles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: color.slate50,
+    // backgroundColor: color.slate50,
   },
   appShell: {
     flex: 1,
@@ -36,10 +41,6 @@ export const appStyles = StyleSheet.create({
     padding: 16,
   },
   loginCard: {
-    backgroundColor: color.white,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: color.slate200,
     padding: 20,
     gap: 16,
     maxWidth: 520,
@@ -63,10 +64,17 @@ export const appStyles = StyleSheet.create({
     fontWeight: '700',
   },
   loginTitle: {
-    color: color.slate900,
-    fontSize: 20,
+    color: color.black,
+    fontSize: 40,
     lineHeight: 28,
-    fontWeight: '700',
+    fontWeight: '400',
+    textAlign: 'center',
+  },
+  loginDescription: {
+    color: color.black,
+    fontSize: 26,
+    lineHeight: 28,
+    fontWeight: '400',
     textAlign: 'center',
   },
   stackGap12: {
@@ -74,12 +82,12 @@ export const appStyles = StyleSheet.create({
   },
   textInput: {
     borderWidth: 1,
-    borderColor: color.slate300,
+    borderColor: color.slate,
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,
     color: color.slate900,
-    backgroundColor: color.white,
+    backgroundColor: color.slate,
   },
   primaryButton: {
     backgroundColor: color.blue600,
@@ -90,8 +98,8 @@ export const appStyles = StyleSheet.create({
   },
   primaryButtonText: {
     color: color.white,
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '400',
   },
   fullWidthButton: {
     width: '100%',

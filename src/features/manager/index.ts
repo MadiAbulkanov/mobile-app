@@ -1,1 +1,0 @@
-export { ManagerApp } from './ManagerApp';

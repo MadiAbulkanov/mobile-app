@@ -1,1 +1,0 @@
-export { ManagerDashboardTab } from './ManagerDashboardTab';

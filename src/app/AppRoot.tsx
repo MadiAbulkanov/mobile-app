@@ -1,19 +1,20 @@
 import React from 'react';
-import { SafeAreaView, useWindowDimensions, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
-import { employees } from '../mocks/fieldOpsData';
 import { appStyles as styles } from '../styles/appStyles';
 import { AuthScreen } from '../features/auth/AuthScreen';
-import { EmployeeApp } from '../features/employee/EmployeeApp';
-import { ManagerApp } from '../features/manager';
+import {
+  DesignerCreateMeasurementScreen,
+  DesignerOrderDetailScreen,
+  OwnerAnalyticsScreen,
+  OwnerClientsScreen,
+  OwnerCreateOrderScreen,
+  OwnerOrdersScreen,
+} from '../features/owner';
 import { useFieldOpsState } from '../hooks/useFieldOpsState';
-import { ManagerTab } from '../types/fieldOps';
 
 export const AppRoot: React.FC = () => {
-  const { width } = useWindowDimensions();
-  const isDesktop = width >= 1100;
-  const isTablet = width >= 780;
   const { state, actions } = useFieldOpsState();
 
   return (
@@ -21,36 +22,75 @@ export const AppRoot: React.FC = () => {
       <StatusBar style="dark" />
       <View style={styles.appShell}>
         {state.role === null ? (
-          <AuthScreen onSelectRole={actions.setRole} />
-        ) : state.role === 'employee' ? (
-          <EmployeeApp
-            activeEmployee={employees[0]}
-            isDesktop={isDesktop}
-            isTablet={isTablet}
-            tasks={state.tasks}
-            onAppendComment={actions.appendComment}
-            onAttachPhoto={actions.attachPhoto}
-            onLogout={() => actions.setRole(null)}
-            onUpdateTaskStatus={actions.updateTaskStatus}
+          <AuthScreen
+            authError={state.authError}
+            isLoading={state.isAuthLoading}
+            onLogin={actions.login}
           />
-        ) : (
-          <ManagerApp
-            employees={employees}
-            isDesktop={isDesktop}
-            isTablet={isTablet}
-            managerTab={state.managerTab}
-            metrics={state.metrics}
-            onLogout={() => actions.setRole(null)}
-            onOpenTask={(taskId: string) => {
-              actions.openTask(taskId);
-              actions.setManagerTab('tasks' as ManagerTab);
-            }}
-            onSelectTab={actions.setManagerTab}
-            onUpdateTask={actions.updateTask}
-            selectedTask={state.selectedTask}
-            tasks={state.tasks}
-          />
-        )}
+        ) : state.role === 'Owner' || state.role === 'Designer' ? (
+          state.ownerScreen === 'orders' ? (
+            <OwnerOrdersScreen
+              activeTab={state.ownerOrdersTab}
+              backButtonLabel={state.role === 'Designer' ? 'Выйти' : 'Назад'}
+              onBack={state.role === 'Designer' ? actions.logout : actions.openOwnerAnalytics}
+              onCreateOrder={() => actions.openOwnerCreateOrder()}
+              onDeleteOrder={actions.deleteOwnerOrder}
+              onEditOrder={(draft, orderId) => actions.openOwnerCreateOrder(draft, orderId)}
+              onOpenClients={actions.openOwnerClients}
+              onSelectOrder={state.role === 'Designer' ? actions.openOrderDetail : undefined}
+              onSelectTab={actions.openOwnerOrders}
+              ownerOrders={state.ownerOrders}
+              tasks={state.tasks}
+            />
+          ) : state.ownerScreen === 'detail' ? (
+            <DesignerOrderDetailScreen
+              measurements={state.designerMeasurements}
+              order={state.selectedOrder}
+              onBack={actions.openOrdersList}
+              onCreateMeasurement={actions.openMeasurementCreate}
+              onDeleteMeasurement={actions.deleteDesignerMeasurement}
+              onEditMeasurement={(draft, measurementId) =>
+                actions.openMeasurementCreate(draft, measurementId)
+              }
+              onDelete={actions.deleteOwnerOrder}
+              onEdit={(draft, orderId) => actions.openOwnerCreateOrder(draft, orderId)}
+            />
+          ) : state.ownerScreen === 'measurement-create' ? (
+            <DesignerCreateMeasurementScreen
+              editingMeasurementId={state.designerEditingMeasurementId}
+              initialDraft={state.designerMeasurementDraft}
+              isEditing={state.isDesignerMeasurementEditing}
+              onBack={actions.openOrderDetailPage}
+              onCreate={actions.createDesignerMeasurement}
+              onUpdate={actions.updateDesignerMeasurement}
+            />
+          ) : state.ownerScreen === 'clients' ? (
+            <OwnerClientsScreen
+              clients={state.ownerClients}
+              onBack={actions.openOwnerOrdersPage}
+              onCreateClient={actions.createOwnerClient}
+              onDeleteClient={actions.deleteOwnerClient}
+              onUpdateClient={actions.updateOwnerClient}
+            />
+          ) : state.ownerScreen === 'create' ? (
+            <OwnerCreateOrderScreen
+              clients={state.ownerClients}
+              editingOrderId={state.ownerEditingOrderId}
+              initialDraft={state.ownerOrderDraft}
+              isEditing={state.isOwnerOrderEditing}
+              onBack={actions.openOwnerOrdersPage}
+              onCreateClient={actions.createOwnerClient}
+              onCreateOrder={actions.createOwnerOrder}
+              onUpdateOrder={actions.updateOwnerOrder}
+            />
+          ) : (
+            <OwnerAnalyticsScreen
+              onLogout={actions.logout}
+              onOpenOrders={actions.openOwnerOrders}
+              tasks={state.tasks}
+            />
+          )
+        ) : null}
       </View>
     </SafeAreaView>
   );
