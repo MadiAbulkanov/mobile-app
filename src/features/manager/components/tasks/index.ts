@@ -1,1 +1,0 @@
-export { ManagerTasksTab } from './ManagerTasksTab';

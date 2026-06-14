@@ -1,1 +1,0 @@
-export { MetaChip } from './MetaChip';

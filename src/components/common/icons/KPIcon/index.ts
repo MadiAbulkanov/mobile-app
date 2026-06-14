@@ -1,0 +1,1 @@
+export { KPIcon } from './KPIcon';
